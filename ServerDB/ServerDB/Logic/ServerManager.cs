@@ -20,27 +20,43 @@ namespace ServerDB.Logic
 
         public ServerManager RemoveServer(int id)
         {
+            using (var context = new ServerContext())
+            {
+                var serverToDelete = context.Servers.Single(x => x.Id == id);
+                context.Remove(serverToDelete);
+                context.SaveChanges();
+            }
             return this;
         }
 
-        public ServerManager UpdateServer(ServerManager serverModel)
+        public ServerManager UpdateServer(ServerModel serverModel)
         {
+            using (var context = new ServerContext())
+            {
+                context.Update(serverModel);
+                context.SaveChanges();
+            }
             return this;
         }
 
-        public ServerManager ChangeName(int id, string newName)
+        public ServerModel GetServer(int id)
         {
-            return this;
-        }
-
-        public ServerManager GetServer(int id)
-        {
-            return null;
+            ServerModel serverById;
+            using (var context = new ServerContext())
+            {
+                serverById = context.Servers.Single(x => x.Id == id);
+            }
+            return serverById;
         }
 
         public List<ServerModel> GetServers()
         {
-            return null;
+            List<ServerModel> serverList;
+            using (var context = new ServerContext())
+            {
+                serverList = context.Servers.ToList();
+            }
+            return serverList;
         }
     }
 }

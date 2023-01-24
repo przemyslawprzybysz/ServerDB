@@ -13,18 +13,58 @@ namespace ServerDB.Controllers
 		ServerManager serverManager = new ServerManager();
 		public IActionResult Index()
 		{
-			var random = new Random();
-			var server = new ServerModel()
-			{
-				Name = $"Test{random.Next(1, 100)}",
-				OS = "Debian 11",
-				IPAddress = $"10.0.0.{random.Next(1, 254)}",
-				Location = "Warszawa ul. Serwerowa 12",
-				MainAdmin = "Adam Nowak",
-				Description = "Serwer testowy"
-			};
-			serverManager.AddServer(server);
+			var serverList = serverManager.GetServers();
+			return View(serverList);
+		}
+
+		[HttpGet]
+		public IActionResult Add()
+		{
 			return View();
+		}
+
+		[HttpPost]
+		public IActionResult Add(ServerModel serverModel)
+		{
+			serverManager.AddServer(serverModel);
+			TempData["AlertMsg"] = "New server added successfully!";
+			return RedirectToAction("Index");
+		}
+
+		[HttpGet]
+		public IActionResult Remove(int id)
+		{
+			var server = serverManager.GetServer(id);
+			return View(server);
+		}
+
+		[HttpPost]
+		public IActionResult RemoveConfirm(int id)
+		{
+			serverManager.RemoveServer(id);
+			TempData["AlertMsg"] = "Server removed successfully!";
+			return RedirectToAction("Index");
+		}
+
+		[HttpGet]
+		public IActionResult Edit(int id)
+		{
+			var server = serverManager.GetServer(id);
+			return View(server);
+		}
+
+		[HttpPost]
+		public IActionResult Edit(ServerModel server)
+		{
+			serverManager.UpdateServer(server);
+			TempData["AlertMsg"] = "Server updated successfully!";
+			return RedirectToAction("Index");
+		}
+		[HttpGet]
+		public IActionResult Details(int id)
+		{
+			var server = serverManager.GetServer(id);
+			return View(server);
 		}
 	}
 }

@@ -1,0 +1,63 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Domain
+{
+    public class Book
+    {
+        public string Title { get; set; }
+        public string Author { get; set; }
+        public int PublicationYear { get; set; }
+        public string ISBN { get; set; }
+
+        public int ProductsAvailable { get; set; }
+        public decimal Price { get; set; }
+
+        public Book() { }
+
+        public Book(string title, string author, int publicationYear, string isbn, int productsAvailable, decimal price)
+        {
+            Title = title;
+            Author = author;
+            ISBN = isbn;
+            PublicationYear = publicationYear;
+            ProductsAvailable = productsAvailable;
+            Price = price;
+        }
+
+        public override string ToString()
+        {
+            return $"Title: {Title} Author: {Author} ProductsAvailable: {ProductsAvailable}";
+        }
+    }
+    public class BookOrdered
+    {
+        public int BookId { get; set; }
+        public int NumerOrdered { get; set; }
+    }
+    public class Order
+    {
+        public Order()
+        {
+            Date = DateTime.Now;
+            BooksOrderedList = new List<BookOrdered>();
+        }
+        public DateTime Date { get; set; }
+        public List<BookOrdered> BooksOrderedList { get; set; }
+        public override string ToString()
+        {
+            string text =  $"Order: {Date} \n";
+			foreach (var item in BooksOrderedList)
+			{
+                text += $"Book: {item.BookId} Count: {item.NumerOrdered}\n";
+			}
+            return text;
+        }
+    }
+public class Domain
+    {
+    }
+}
